@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLC Guide</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Use your own CSS for styling instead of Bootstrap -->
+</head>
+<body>
+    <!-- Back Button -->
+    <div class="back-button-container">
+        <a href="{{ url_for('home') }}" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.71 16.29L12.41 14H19v-2H12.41l2.3-2.29L14 8l-6 6 6 6z"/></svg>
+            Back
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content container">
+        <div class="row">
+            <!-- Guide Content -->
+            <div class="col-md-9">
+                <!-- Image Container -->
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='uploads/bg.jpeg') }}" alt="Guide Image">
+                </div>
+                
+                <!-- Guide Sections -->
+                <div class="guide-content">
+                    <h2>DLC Boss Guide</h2>
+                    
+                    <!-- Section 1 -->
+                    <div class="section-space">
+                        <h3>Dancing Lion</h3>
+                        <div class="image-container">
+                            <img src="{{ url_for('static', filename='uploads/section1_image.jpg') }}" alt="Dancing Lion Image">
+                        </div>
+                        <p>Blah blah about The Dancing Lion. This page provides an overview of what to expect and how to get started with this guide.</p>
+                        <!-- Image containers and spacing -->
+                        <div class="carousel">
+                            <div class="large-image">
+                                <img src="{{ url_for('static', filename='uploads/section1_large_image.jpg') }}" alt="Dancing Lion Large Image">
+                            </div>
+                            <div class="small-images">
+                                <img src="{{ url_for('static', filename='uploads/section1_small_image1.jpg') }}" alt="Small Image 1">
+                                <img src="{{ url_for('static', filename='uploads/section1_small_image2.jpg') }}" alt="Small Image 2">
+                                <img src="{{ url_for('static', filename='uploads/section1_small_image3.jpg') }}" alt="Small Image 3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="section-space">
+                        <h3>Renalla</h3>
+                        <div class="image-container">
+                            <img src="{{ url_for('static', filename='uploads/section2_image.jpg') }}" alt="Renalla Image">
+                        </div>
+                        <p>This section covers the basics of getting started with the DLC, including initial steps and key points to know.</p>
+                        <!-- Image containers and spacing -->
+                        <div class="carousel">
+                            <div class="large-image">
+                                <img src="{{ url_for('static', filename='uploads/section2_large_image.jpg') }}" alt="Renalla Large Image">
+                            </div>
+                            <div class="small-images">
+                                <img src="{{ url_for('static', filename='uploads/section2_small_image1.jpg') }}" alt="Small Image 1">
+                                <img src="{{ url_for('static', filename='uploads/section2_small_image2.jpg') }}" alt="Small Image 2">
+                                <img src="{{ url_for('static', filename='uploads/section2_small_image3.jpg') }}" alt="Small Image 3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3 -->
+                    <div class="section-space">
+                        <h3>Messmer</h3>
+                        <div class="image-container">
+                            <img src="{{ url_for('static', filename='uploads/section3_image.jpg') }}" alt="Messmer Image">
+                        </div>
+                        <p>Here you will find more advanced strategies and tips for mastering the DLC content.</p>
+                        <!-- Image containers and spacing -->
+                        <div class="carousel">
+                            <div class="large-image">
+                                <img src="{{ url_for('static', filename='uploads/section3_large_image.jpg') }}" alt="Messmer Large Image">
+                            </div>
+                            <div class="small-images">
+                                <img src="{{ url_for('static', filename='uploads/section3_small_image1.jpg') }}" alt="Small Image 1">
+                                <img src="{{ url_for('static', filename='uploads/section3_small_image2.jpg') }}" alt="Small Image 2">
+                                <img src="{{ url_for('static', filename='uploads/section3_small_image3.jpg') }}" alt="Small Image 3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <div class="section-space">
+                        <h3>Gaius</h3>
+                        <div class="image-container">
+                            <img src="{{ url_for('static', filename='uploads/section4_image.jpg') }}" alt="Gaius Image">
+                        </div>
+                        <p>Detailed guides on how to defeat various bosses encountered in the DLC.</p>
+                        <!-- Image containers and spacing -->
+                        <div class="carousel">
+                            <div class="large-image">
+                                <img src="{{ url_for('static', filename='uploads/section4_large_image.jpg') }}" alt="Gaius Large Image">
+                            </div>
+                            <div class="small-images">
+                                <img src="{{ url_for('static', filename='uploads/section4_small_image1.jpg') }}" alt="Small Image 1">
+                                <img src="{{ url_for('static', filename='uploads/section4_small_image2.jpg') }}" alt="Small Image 2">
+                                <img src="{{ url_for('static', filename='uploads/section4_small_image3.jpg') }}" alt="Small Image 3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5 -->
+                    <div class="section-space">
+                        <h3>Bayle</h3>
+                        <div class="image-container">
+                            <img src="{{ url_for('static', filename='uploads/section5_image.jpg') }}" alt="Bayle Image">
+                        </div>
+                        <p>Tips for those who aim to complete every aspect of the DLC, including achievements and hidden content.</p>
+                        <!-- Image containers and spacing -->
+                        <div class="carousel">
+                            <div class="large-image">
+                                <img src="{{ url_for('static', filename='uploads/section5_large_image.jpg') }}" alt="Bayle Large Image">
+                            </div>
+                            <div class="small-images">
+                                <img src="{{ url_for('static', filename='uploads/section5_small_image1.jpg') }}" alt="Small Image 1">
+                                <img src="{{ url_for('static', filename='uploads/section5_small_image2.jpg') }}" alt="Small Image 2">
+                                <img src="{{ url_for('static', filename='uploads/section5_small_image3.jpg') }}" alt="Small Image 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dropdown Navigation -->
+            <div class="col-md-3">
+                <div class="dropdown-navigation">
+                    <h3>Guide Sections</h3>
+                    <select class="custom-select" onchange="location = this.value;">
+                        <option value="" selected>Choose a section</option>
+                        <option value="#dancing-lion">Dancing Lion</option>
+                        <option value="#renalla">Renalla</option>
+                        <option value="#messmer">Messmer</option>
+                        <option value="#gaius">Gaius</option>
+                        <option value="#bayle">Bayle</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

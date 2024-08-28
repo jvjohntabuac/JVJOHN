@@ -1,0 +1,3 @@
+Elden Ring
+
+Elden Ring is a masterpiece, having mastered the art of showing without telling.  As a result, it is very different from other open-world games I have played such as Skyrim and Far Cry which are story and questline driven. From the get-go, Elden Ring doesn't impose any particular playstyle or route on you. You are completely free to do what you want to from the very start of the game. You can finish the main storyline and beat the final boss or you can explore the entire map without ever seeing the main bosses, it truly is up to you with no outside influence. It is truly refreshing to feel this sense of freedom in choice and exploration in any open world game.

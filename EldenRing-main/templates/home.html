@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+    <!-- Navbar Toggle Button -->
+    <button onclick="toggleNavbar()" id="nav-toggle" class="nav-toggle">☰</button>
+
+    <!-- Sidebar Navbar -->
+    <div id="navbar" class="navbar">
+        <button onclick="closeNavbar()" class="nav-close">×</button>
+        <ul>
+            <li><a href="/create_post" class="block py-2 px-4 hover:bg-gray-600">Create a New Post</a></li>
+            <li><a href="/DLC" class="block py-2 px-4 hover:bg-gray-600">DLC</a></li>
+            <li><a href="/profile" class="block py-2 px-4 hover:bg-gray-600">Profile</a></li>
+        </ul>
+        <a href="/logout" class="logout-button block py-2 px-4 mt-4 bg-red-600 hover:bg-red-800 text-center">Logout</a>
+    </div>
+
+    <!-- Chibi Container -->
+    <div class="chibi-container">
+        <img src="{{ url_for('static', filename='uploads/chibi.png') }}" alt="Chibi Character" class="chibi-img" onclick="togglePopup()">
+        <div id="comic-popup" class="comic-popup">
+            <div class="comic-arrow"></div>
+          WELCOME!
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1>Welcome, {{ username }}</h1>
+        <h2>Recent Posts</h2>
+        <div class="posts-container mt-4">
+            {% for post in posts %}
+            <div class="post mb-4 p-4 border border-gray-300 rounded-lg">
+                <div class="flex items-center mb-2">
+                    <div class="mr-4">
+                        <button id="like-button-{{ post.id }}" 
+                                data-post-id="{{ post.id }}" 
+                                class="like-button {{ 'liked' if post.is_liked_by_current_user else '' }}" 
+                                onclick="debouncedToggleLike(event, '{{ post.id }}')">
+                            <span id="like-count-{{ post.id }}" class="like-count">{{ post.like_count }}</span> Like
+                        </button>
+                    </div>
+                    <p><strong>{{ post.username }}</strong>: {{ post.content }}</p>
+                </div>
+                {% if post.image_url %}
+                <img src="{{ post.image_url }}" alt="{{ post.content | truncate(80, true, '...') }}" style="max-width: 100%; height: auto;">
+                {% endif %}
+                <p class="text-gray-500 text-sm">Posted on {{ post.created_at }}</p>
+            </div>
+            {% else %}
+            <p>No posts to show.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("comic-popup");
+            popup.style.display = (popup.style.display === "none" || popup.style.display === "") ? "block" : "none";
+        }
+
+        function makeDraggable(element) {
+            var isDragging = false;
+            var offsetX, offsetY;
+
+            element.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                offsetX = e.clientX - element.getBoundingClientRect().left;
+                offsetY = e.clientY - element.getBoundingClientRect().top;
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    element.style.left = (e.clientX - offsetX) + 'px';
+                    element.style.top = (e.clientY - offsetY) + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+            });
+        }
+
+        window.onload = function() {
+            makeDraggable(document.getElementById("comic-popup"));
+        }
+
+        let debounceTimeout;
+
+        function debounce(func, delay) {
+            return function(...args) {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function toggleNavbar() {
+            const navbar = document.getElementById("navbar");
+            const navToggle = document.getElementById("nav-toggle");
+            navbar.classList.toggle("active");
+            navToggle.classList.toggle("hidden");
+
+            localStorage.setItem("navbar_active", navbar.classList.contains("active"));
+            localStorage.setItem("nav_toggle_hidden", navToggle.classList.contains("hidden"));
+        }
+
+        function closeNavbar() {
+            const navbar = document.getElementById("navbar");
+            const navToggle = document.getElementById("nav-toggle");
+            navbar.classList.remove("active");
+            navToggle.classList.remove("hidden");
+
+            localStorage.setItem("navbar_active", 'false');
+            localStorage.setItem("nav_toggle_hidden", 'false');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById("navbar");
+            const navToggle = document.getElementById("nav-toggle");
+
+            const isNavbarActive = localStorage.getItem("navbar_active") === 'true';
+            const isNavToggleHidden = localStorage.getItem("nav_toggle_hidden") === 'true';
+
+            if (isNavbarActive) {
+                navbar.classList.add("active");
+                navToggle.classList.add("hidden");
+            } else {
+                navbar.classList.remove("active");
+                navToggle.classList.remove("hidden");
+            }
+
+            const likeButtons = document.querySelectorAll('.like-button');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            likeButtons.forEach(button => {
+                const postId = button.getAttribute('data-post-id');
+                const likeCountElement = document.getElementById(`like-count-${postId}`);
+
+                fetch(`/get_like_count?post_id=${postId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error('Error fetching like count:', data.error);
+                            return;
+                        }
+                        likeCountElement.textContent = data.like_count;
+                    })
+                    .catch(error => console.error('Error fetching like count:', error));
+
+                button.addEventListener('click', (event) => {
+                    debouncedToggleLike(event, postId);
+                });
+            });
+        });
+
+        function toggleLike(event, postId) {
+            event.preventDefault();
+            const likeButton = document.getElementById(`like-button-${postId}`);
+            const likeCountElement = document.getElementById(`like-count-${postId}`);
+            let currentLikeCount = parseInt(likeCountElement.textContent, 10);
+            const isLiked = likeButton.classList.contains('liked');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            likeButton.disabled = true;
+
+            if (isLiked) {
+                currentLikeCount -= 1;
+                likeButton.classList.remove('liked');
+            } else {
+                currentLikeCount += 1;
+                likeButton.classList.add('liked');
+            }
+
+            likeCountElement.textContent = currentLikeCount;
+
+            fetch('/like_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken
+                },
+                body: new URLSearchParams({ post_id: postId }).toString(),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error updating like state on server:', data.error);
+                    if (isLiked) {
+                        currentLikeCount += 1;
+                        likeButton.classList.add('liked');
+                    } else {
+                        currentLikeCount -= 1;
+                        likeButton.classList.remove('liked');
+                    }
+                    likeCountElement.textContent = currentLikeCount;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                likeButton.disabled = false;
+            });
+        }
+
+        const debouncedToggleLike = debounce(toggleLike, 300);
+    </script>
+</body>
+</html>

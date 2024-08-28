@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Navbar Toggle Button -->
+    <button onclick="toggleNavbar()" id="nav-toggle" class="nav-toggle">☰</button>
+
+    <!-- Sidebar Navbar -->
+    <div id="navbar" class="navbar bg-gray-800 text-white p-4">
+        <button onclick="closeNavbar()" class="nav-close">×</button>
+        <ul>
+            <li><a href="/create_post" class="block py-2 px-4 hover:bg-gray-600">Create a New Post</a></li>
+            <li><a href="/DLC" class="block py-2 px-4 hover:bg-gray-600">DLC</a></li>
+            <li><a href="/profile" class="block py-2 px-4 hover:bg-gray-600">Profile</a></li>
+        </ul>
+        <a href="/logout" class="logout-button block py-2 px-4 mt-4 bg-red-600 hover:bg-red-800 text-center">Logout</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content bg-slate-200 p-4">
+        <h1 class="text-xl font-bold">Welcome, {{ username }}</h1>
+        <h2 class="text-lg font-semibold mt-4">Recent Posts</h2>
+        <div class="posts mt-4">
+            {% for post in posts %}
+            <div class="post bg-white p-4 mb-4 border rounded shadow">
+                <div class="vote-section">
+                    <!-- Voting buttons if any -->
+                </div>
+                <div class="post-content">
+                    <p><strong>{{ post.username }}</strong>: {{ post.content }}</p>
+                    {% if post.image_url %}
+                    <img src="{{ post.image_url }}" alt="User posted image" class="mt-2 max-w-full h-auto">
+                    {% endif %}
+                    <p class="mt-2 text-gray-600">Posted on {{ post.created_at }}</p>
+                    <div class="comments-section">
+                        <button class="comments-toggle">Comments ({{ post.comments|length }})</button>
+                        <div class="comments-list hidden">
+                            {% for comment in post.comments %}
+                            <div class="comment">
+                                <p><strong>{{ comment.username }}</strong>: {{ comment.content }}</p>
+                                <p class="text-gray-600 text-sm">{{ comment.created_at }}</p>
+                            </div>
+                            {% endfor %}
+                            <form action="{{ url_for('add_comment', post_id=post.id) }}" method="POST" class="add-comment-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="text" name="comment" placeholder="Add a comment..." required>
+                                <button type="submit">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p>No posts to show.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function toggleNavbar() {
+            document.getElementById("navbar").classList.toggle("active");
+            document.getElementById("nav-toggle").classList.toggle("hidden");
+        }
+
+        function closeNavbar() {
+            document.getElementById("navbar").classList.remove("active");
+            document.getElementById("nav-toggle").classList.remove("hidden");
+        }
+
+        document.querySelectorAll('.comments-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const commentsList = button.nextElementSibling;
+                commentsList.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
